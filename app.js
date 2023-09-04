@@ -1,4 +1,4 @@
-const { updateProducts } = require('./src/updateProducts');
+const ProductsManager = require('./src/ProductsManager');
 const generateXML = require('./src/generateXML');
 
 const main = async () => {
@@ -13,7 +13,8 @@ const main = async () => {
       }
     }
     console.log('Updating products file...');
-    await updateProducts(totalProducts);
+    const productsManager = new ProductsManager(totalProducts);
+    await productsManager.updateProducts();
   }
 
   console.log('Generating XML...')
