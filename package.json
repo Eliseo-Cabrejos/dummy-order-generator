@@ -1,0 +1,20 @@
+{
+  "name": "ordersgenerator",
+  "version": "1.0.0",
+  "description": "SFCC Orders Generator",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js"
+  },
+  "keywords": [
+    "SFCC",
+    "Orders"
+  ],
+  "author": "Mauricio Bedoya",
+  "license": "ISC",
+  "dependencies": {
+    "@faker-js/faker": "^8.0.2",
+    "axios": "^1.5.0",
+    "xmlbuilder": "^15.1.1"
+  }
+}

@@ -1,0 +1,18 @@
+{
+  "outputPath": "./",
+  "numOrders": 3000,
+  "startOrderNumber": 1,
+  "maxProductsPerOrder": 3,
+  "maxProductQuantity": 5,
+  "defaultProductPoolSize": 5,
+  "orderNumberPrefixRegex": "",
+  "productIdPrefix": "BLM-",
+  "productIds": [
+    {
+      "product-id": "BLM-024",
+      "product-name": "Coffee capsules - Irish flavor",
+      "net-price": "35.00",
+      "tax-rate": "0.08"
+    }
+  ]
+}
