@@ -12,7 +12,7 @@ const main = async () => {
         return;
       }
     }
-    console.log('Updating products...');
+    console.log('Updating products file...');
     await updateProducts(totalProducts);
   }
 

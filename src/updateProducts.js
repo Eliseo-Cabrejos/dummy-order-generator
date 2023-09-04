@@ -1,8 +1,8 @@
-const configFilePath = "../config/config.json";
-
-const { writeFile } = require('fs')
+const { writeFile } = require('fs').promises;
 const axios = require('axios');
-const config = require(configFilePath);
+const path = require('path');
+
+const config = require("../config/config.json");
 const {
   instanceUrl,
   bm_email,
@@ -11,8 +11,10 @@ const {
   clientSecret
 } = require('../config/credentials.json');
 
+const products = [];
+
 const getRandomProductId = () => {
-  const productIdNumber = Math.floor(Math.random() * 60) + 1;
+  const productIdNumber = Math.ceil(Math.random() * config.maxProductId);
   return `${config.productIdPrefix}${productIdNumber.toString().padStart(3, '0')}`;
 };
 
@@ -55,6 +57,7 @@ const getToken = async () => {
 
 const getProductInfo = async (productId) => {
   try {
+    // TODO: Move getToken to somewhere else.
     const accessToken = await getToken();
 
     const response = await axios.get(`${instanceUrl}/s/-/dw/data/v23_2/products/${productId}`, {
@@ -76,7 +79,7 @@ const getProductInfo = async (productId) => {
 };
 
 const addProductToConfig = async (id) => {
-    console.log(id);
+    console.log(`Fetching ${id}...`);
     const prod = await getProductInfo(id);
     const prodData = {
         "product-id": prod.id,
@@ -84,7 +87,7 @@ const addProductToConfig = async (id) => {
         "net-price": prod.price.toFixed(2),
         "tax-rate": "0.08"
     }
-    config.productIds.push(prodData);
+    products.push(prodData);
 }
 
 const aysncForEach = async (array, callback) => {
@@ -94,25 +97,21 @@ const aysncForEach = async (array, callback) => {
 }
 
 const updateConfigObj = async (totalProducts) => {
-    config.productIds = [];
     const totalIds = totalProducts || config.defaultProductPoolSize;
     const ids = generateIDs(totalIds);
 
-    console.log('Fetching products...');
     await aysncForEach(ids, addProductToConfig);
-    console.log('Products data successfully retrieved!');
+    console.log('Products\' data successfully retrieved!');
 }
 
 const updateProducts = async (totalProducts) => {
     await updateConfigObj(totalProducts);
 
-    writeFile(configFilePath, JSON.stringify(config, null, 2), (error) => {
-        if (error) {
-            console.log(`An error has occurred updating the config file: ${error}`);
-            return;
-        }
-        console.log("Data written successfully to the file");
-    });
+    console.log('Writing data to file...')
+    const filePath = path.join(__dirname, '..', 'config', 'products.json');
+    await writeFile(filePath, JSON.stringify(products, null, 2))
+      .then(() => console.log('Data written successfully to the file!'))
+      .catch(error => console.log(`An error has occurred updating the config file: ${error}`));
 }
 
 module.exports = {

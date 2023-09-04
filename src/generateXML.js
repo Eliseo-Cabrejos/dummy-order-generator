@@ -1,6 +1,9 @@
 const fs = require("fs");
+const path = require('path');
 const xmlbuilder = require("xmlbuilder");
+
 const config = require("../config/config.json");
+const products = require('../config/products.json');
 
 const { faker } = require('@faker-js/faker/locale/en_US');
 
@@ -9,13 +12,13 @@ function calculateTax(price, taxRate) {
 }
 
 function getRandomProducts() {
-  const products = new Set();
-  const maxProducts = config.maxProductsPerOrder > config.productIds.length ? config.productIds.length : config.maxProductsPerOrder;
+  const randomProducts = new Set();
+  const maxProducts = config.maxProductsPerOrder > products.length ? products.length : config.maxProductsPerOrder;
   const totalProducts = Math.ceil(Math.random() * maxProducts);
-  while (products.size < totalProducts) {
-    products.add(config.productIds[Math.floor(Math.random() * config.productIds.length)]);
+  while (randomProducts.size < totalProducts) {
+    randomProducts.add(products[Math.floor(Math.random() * products.length)]);
   }
-  return Array.from(products);
+  return Array.from(randomProducts);
 }
 
 function generateCustomerData() {
@@ -217,13 +220,13 @@ module.exports = function () {
 
   const xmlString = root.end({ pretty: true });
 
-  const path = config.outputPath + 'generatedOrders.xml';
+  const filePath = path.join(__dirname, '..', 'generatedOrders.xml');
 
-  fs.writeFile(path, xmlString, (err) => {
+  fs.writeFile(filePath, xmlString, (err) => {
     if (err) {
       console.error("Error writing to file:", err);
     } else {
-      console.log("XML file generated successfully.");
+      console.log("XML file generated successfully!");
     }
   });
 }
