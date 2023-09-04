@@ -4,7 +4,9 @@
   "description": "SFCC Orders Generator",
   "main": "app.js",
   "scripts": {
-    "start": "node app.js"
+    "start": "node app.js -xml",
+    "products": "node app.js -u --total-products",
+    "init": "node app.js -u -xml --total-products"
   },
   "keywords": [
     "SFCC",
