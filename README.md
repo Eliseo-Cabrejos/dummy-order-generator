@@ -24,7 +24,7 @@ Install dependencies
   npm install
 ```
 
-Follow the instructions on [Configuration files](##configuration-files) and then run
+Follow the instructions on [Configuration files](#configuration-files) and then run
 
 ```bash
   npm run init
